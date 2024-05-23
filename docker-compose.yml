@@ -1,0 +1,54 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres
+    container_name: postgres_container
+    networks:
+      - my_network
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    # volumes:
+    #   - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  frontend:
+    image: frontend_img:latest
+    build: .
+    container_name: frontend_container
+    depends_on:
+      - postgres
+    ports:
+      - "5173:5173"
+    networks:
+      - my_network
+
+  backend:
+    image: backend_img:latest
+    build: .
+    container_name: backend_container
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+    networks:
+      - my_network
+
+  websocket:
+    image: ws_img:latest
+    build: .
+    container_name: ws_container
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    networks:
+      - my_network
+
+volumes:
+  postgres_data:
+
+networks:
+  my_network:
