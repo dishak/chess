@@ -1,3 +1,5 @@
+# root_image: copies & installs the (common) dependencies & necessary folders 
+# for backend and web-socket server in packages folder
 FROM node:20-alpine AS root_image
 WORKDIR /root
 COPY package.json yarn.lock ./
@@ -10,11 +12,15 @@ COPY ./packages/db ./packages/db
 COPY ./packages/eslint-config ./packages/eslint-config
 COPY ./packages/typescript-config ./packages/typescript-config
 
+
+# copies remaining files from root folder except /apps & /packages
 FROM node:20-alpine as intermediate_img
 WORKDIR /root
 COPY . .
 RUN rm -rf apps/ packages/
 
+
+# copies and installs dependencies for backend process 
 FROM node:20-alpine as backend_img
 WORKDIR /root
 COPY --from=root_image /root ./
@@ -25,6 +31,7 @@ COPY ./apps/backend ./apps/backend/
 COPY --from=intermediate_img /root ./
 CMD ["npm", "run", "start:backend"]
 
+# copies and installs dependencies for web socket process 
 FROM node:20-alpine as ws_img
 WORKDIR /root
 COPY --from=root_image /root ./
@@ -35,7 +42,7 @@ COPY ./apps/ws ./apps/ws/
 COPY --from=intermediate_img /root ./
 CMD ["npm", "run", "start:ws"]
 
-
+# copies and installs dependencies for frontend process
 FROM node:20-alpine as frontend_img
 WORKDIR /root
 COPY --from=root_image /root ./
@@ -50,6 +57,3 @@ COPY ./packages/ui ./packages/ui/
 COPY ./apps/frontend ./apps/frontend/
 COPY --from=intermediate_img /root ./
 CMD ["npm", "run", "start:frontend"]
-
-
-# CMD ["sh", "-c", "while :; do sleep 1; done"]
