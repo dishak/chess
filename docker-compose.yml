@@ -20,6 +20,8 @@ services:
 
   frontend:
     image: chess:frontend_img
+    volumes:
+      - ./apps/frontend:/root/apps/frontend
     build:
       context: .
       dockerfile: Dockerfile
@@ -40,6 +42,8 @@ services:
       dockerfile: Dockerfile
       target: backend_img
     container_name: backend_container
+    volumes:
+      - ./apps/backend:/root/apps/backend
     depends_on:
       postgres:
         condition: service_healthy
@@ -55,6 +59,8 @@ services:
       dockerfile: Dockerfile
       target: ws_img
     container_name: ws_container
+    volumes:
+      - ./apps/ws:/root/apps/ws
     depends_on:
       postgres:
         condition: service_healthy

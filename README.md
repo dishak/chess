@@ -34,4 +34,3 @@ Let's keep it simple
  - Start frontend
     - cd apps/frontend
     - npm run dev
-

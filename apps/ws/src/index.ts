@@ -13,10 +13,10 @@ wss.on('connection', function connection(ws, req) {
   const token: string = url.parse(req.url, true).query.token;
   const userId = extractUserId(token);
   gameManager.addUser(new User(ws, userId));
-
   ws.on('close', () => {
     gameManager.removeUser(ws);
   });
 });
 
 console.log('done');
+// "dev": "npx esbuild ./src/index.ts --bundle --platform=node --outfile=dist/index.js --sourcemap && nodemon dist/index.js"

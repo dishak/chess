@@ -23,7 +23,7 @@ export class GameManager {
   private pendingGameId: string | null;
   private users: User[];
 
-  constructor() {
+  constructor() { 
     this.games = [];
     this.pendingGameId = null;
     this.users = [];
