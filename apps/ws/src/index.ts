@@ -19,4 +19,3 @@ wss.on('connection', function connection(ws, req) {
 });
 
 console.log('done');
-// "dev": "npx esbuild ./src/index.ts --bundle --platform=node --outfile=dist/index.js --sourcemap && nodemon dist/index.js"
